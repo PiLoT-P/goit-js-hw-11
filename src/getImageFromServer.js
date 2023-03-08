@@ -16,7 +16,7 @@ export class GetImageFromServer {
             image_type: 'photo',
             orientation: 'horizontal',
             safesearch: 'true',
-            per_page: 5,
+            per_page: 40,
             page: this.page,
         })
         return axios.get(`${this.#BASE_URL}?${params}`).then(response => {
