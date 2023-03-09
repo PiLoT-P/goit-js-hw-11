@@ -2,6 +2,8 @@ import { GetImageFromServer } from './getImageFromServer';
 import { createListItem } from './createListItem';
 
 import Notiflix from 'notiflix';
+import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
 
 const formImages = document.querySelector('#search-form');
 const buttonLoadMor = document.querySelector('.load-more');

@@ -4,7 +4,7 @@ export function createListItem(images) {
     const nameImg = images.map((image) => {
         return `
             <div class="photo-card">
-                <img class = 'icon'  src="${image.webformatURL}" alt="${image.tags}" loading="lazy" />
+                <a><img class = 'icon'  src="${image.webformatURL}" alt="${image.tags}" loading="lazy" /></a>
                 <div class="info">
                     <p class="info-item">
                     <b>Likes</b>
