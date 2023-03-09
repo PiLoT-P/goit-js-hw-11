@@ -16,6 +16,7 @@ function addImages(event) {
     event.preventDefault();
 
     listImage.innerHTML = '';
+    getImageFromServer.page = 1;
 
     const {
         elements: { searchQuery }
@@ -49,7 +50,7 @@ function onLoadMore(event) {
 
     getImageFromServer.getImages(nameImage).then(data => {
         totalNumberImage += data.hits.length;
-        if (totalNumberImage > data.totalHits) {
+        if (totalNumberImage >= data.totalHits) {
             buttonLoadMor.classList.add('is-hiden');
             Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.");
             return;
