@@ -10,12 +10,14 @@ const buttonLoadMor = document.querySelector('.load-more');
 const listImage = document.querySelector('.gallery');
 
 const getImageFromServer = new GetImageFromServer();
-let nameImage;
+let nameImage = '';
 let totalNumberImage = 0;
+let lightbox = null;
 
 
 async function addImages(event) {
     event.preventDefault();
+
 
     listImage.innerHTML = '';
     getImageFromServer.page = 1;
@@ -32,7 +34,6 @@ async function addImages(event) {
 
     try {
         const getImg = await getImageFromServer.getImages(nameImage);
-        console.log()
         if (getImg.totalHits <= 0) {
             Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.');
             return;
@@ -44,6 +45,8 @@ async function addImages(event) {
     } catch (error) {
         console.log(error.message);
     }
+
+    lightbox = new SimpleLightbox('.gallery a', {});
 }
 
 formImages.addEventListener('submit', addImages);
@@ -63,8 +66,7 @@ async function onLoadMore(event) {
     } catch (error) {
         console.log(error.message);
     }
+    lightbox.refresh();
 }
 
 buttonLoadMor.addEventListener('click', onLoadMore);
-
-const lightbox = new SimpleLightbox('.gallery a', {captionDelay: 250,});

@@ -2,10 +2,9 @@ const listImage = document.querySelector('.gallery');
 
 export function createListItem(images) {
     const nameImg = images.map((image, index) => {
-        // console.log(image)
         return `
             <div class="photo-card">
-                <a href="${image.largeImageURL}"><img class = 'icon'  src="${image.webformatURL}" alt="${image.tags}" loading="lazy" title="valik"/></a>
+                <a class="link" href="${image.largeImageURL}"><img class = 'icon'  src="${image.webformatURL}" alt="${image.tags}" loading="lazy" /></a>
                 <div class="info">
                     <p class="info-item">
                     <b>Likes</b>
