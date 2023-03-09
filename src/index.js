@@ -14,7 +14,7 @@ let nameImage;
 let totalNumberImage = 0;
 
 
-function addImages(event) {
+async function addImages(event) {
     event.preventDefault();
 
     listImage.innerHTML = '';
@@ -30,40 +30,41 @@ function addImages(event) {
         return;
     }
 
-    getImageFromServer.getImages(nameImage).then(data => {
-        if (data.totalHits <= 0) {
+    try {
+        const getImg = await getImageFromServer.getImages(nameImage);
+        console.log()
+        if (getImg.totalHits <= 0) {
             Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.');
             return;
         }
-
-        totalNumberImage += data.hits.length;
-        Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);  
-        createListItem(data.hits);
+        totalNumberImage += getImg.hits.length;
+        Notiflix.Notify.success(`Hooray! We found ${getImg.totalHits} images.`);  
+        createListItem(getImg.hits);
         buttonLoadMor.classList.remove('is-hiden');
-    }).catch(error => {
-        console.log(error);
-    })
+    } catch (error) {
+        console.log(error.message);
+    }
 }
 
 formImages.addEventListener('submit', addImages);
 
-function onLoadMore(event) {
+async function onLoadMore(event) {
     getImageFromServer.page += 1;
 
-    getImageFromServer.getImages(nameImage).then(data => {
-        totalNumberImage += data.hits.length;
-        if (totalNumberImage >= data.totalHits) {
+    try {
+        const getImg = await getImageFromServer.getImages(nameImage);
+        totalNumberImage += getImg.hits.length;
+        if (totalNumberImage >= getImg.totalHits) {
             buttonLoadMor.classList.add('is-hiden');
             Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.");
             return;
         }
-        createListItem(data.hits);
-        // lightbox.refresh();
-    }).catch(error => {
-        console.log(error);
-    })
+        createListItem(getImg.hits);
+    } catch (error) {
+        console.log(error.message);
+    }
 }
 
 buttonLoadMor.addEventListener('click', onLoadMore);
 
-// const lightbox = new SimpleLightbox('.gallery a', {captionDelay: 250,});
+const lightbox = new SimpleLightbox('.gallery a', {captionDelay: 250,});

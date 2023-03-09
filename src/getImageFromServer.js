@@ -9,7 +9,7 @@ export class GetImageFromServer {
     }
 
 
-    getImages = (name) => {
+    getImages = async (name) => {
         const params = new URLSearchParams({
             key: this.#myKey,
             q: name,
@@ -19,8 +19,7 @@ export class GetImageFromServer {
             per_page: 40,
             page: this.page,
         })
-        return axios.get(`${this.#BASE_URL}?${params}`).then(response => {
-            return response.data;
-        })
+        const responses = await axios.get(`${this.#BASE_URL}?${params}`);
+        return responses.data;
     }
 }
