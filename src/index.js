@@ -58,9 +58,12 @@ function onLoadMore(event) {
             return;
         }
         createListItem(data.hits);
+        // lightbox.refresh();
     }).catch(error => {
         console.log(error);
     })
 }
 
 buttonLoadMor.addEventListener('click', onLoadMore);
+
+// const lightbox = new SimpleLightbox('.gallery a', {captionDelay: 250,});

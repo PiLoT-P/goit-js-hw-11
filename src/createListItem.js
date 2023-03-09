@@ -1,10 +1,11 @@
 const listImage = document.querySelector('.gallery');
 
 export function createListItem(images) {
-    const nameImg = images.map((image) => {
+    const nameImg = images.map((image, index) => {
+        // console.log(image)
         return `
             <div class="photo-card">
-                <a><img class = 'icon'  src="${image.webformatURL}" alt="${image.tags}" loading="lazy" /></a>
+                <a href="${image.largeImageURL}"><img class = 'icon'  src="${image.webformatURL}" alt="${image.tags}" loading="lazy" title="valik"/></a>
                 <div class="info">
                     <p class="info-item">
                     <b>Likes</b>
@@ -29,3 +30,4 @@ export function createListItem(images) {
         .join('');
     listImage.insertAdjacentHTML("beforeend", nameImg);;
 }
+
