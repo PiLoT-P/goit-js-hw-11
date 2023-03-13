@@ -79,3 +79,14 @@ button[type="submit"] {
 .info{
     margin-left: 15px;
 }
+
+.list{
+    display: flex;
+    gap: 15px;
+    list-style: none;
+    justify-content: center;
+}
+
+.color{
+    background-color: teal;
+}
