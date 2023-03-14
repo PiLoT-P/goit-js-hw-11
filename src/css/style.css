@@ -5,6 +5,8 @@
 body {
     margin: 0;
     padding: 0;
+
+    background-color: #202025;
 }
 
 .search-form{
@@ -80,13 +82,80 @@ button[type="submit"] {
     margin-left: 15px;
 }
 
-.list{
+.color{
+    background-color: teal;
+}
+
+
+
+
+.pagination-container{
+    margin-top: 20px;
+}
+
+.pagination-list{
+    margin: 0;
+    padding: 0;
     display: flex;
-    gap: 15px;
     list-style: none;
     justify-content: center;
 }
 
-.color{
-    background-color: teal;
+.pagination-arrow{
+    width: 60px;
+    height: 40px;
+}
+
+/* .prew-button{
+    margin-right: 198px;
+}
+
+.next-button{
+    margin-left: 198px;
+} */
+
+.pagination-number{
+    width: 40px;
+    height: 40px;
+
+    background-color: transparent;
+    color: rgba(254, 112, 49, 1);
+    border: 1px solid #4F4E4E;
+    border-radius: 4px;
+}
+
+.pagination-number:hover,
+.pagination-number:focus{
+    background-color: #FE7031;
+    color: #202025;
+}
+
+.active{
+    background-color: #FE7031 ;
+    color: #202025;
+}
+
+.pagination-item:first-child{
+    margin-right: 198px;
+}
+.pagination-item:last-child{
+    margin-left: 198px;
+}
+.pagination-item:nth-child(n+2){
+    margin-right: 15px;
+}
+
+.pagination-item:nth-last-child(-n + 2){
+    margin-right: 0;
+}
+
+.dot-item{
+    width: 40px;
+    height: 40px;
+    padding: 10px 13px;
+
+    background-color: transparent;
+    color: rgba(254, 112, 49, 1);
+    border: 1px solid #4F4E4E;
+    border-radius: 4px;
 }
