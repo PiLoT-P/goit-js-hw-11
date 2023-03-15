@@ -1,5 +1,6 @@
 import { GetImageFromServer } from './getImageFromServer';
 import { createListItem } from './createListItem';
+import { element, ulTag } from './pagination';
 
 import Notiflix from 'notiflix';
 import SimpleLightbox from "simplelightbox";
@@ -54,71 +55,16 @@ async function addImages(event) {
     }
 
     lightbox = new SimpleLightbox('.gallery a', {});
+    if (totalPages > 6) {
+        prewButton.classList.remove('is-hiden');
+        nextButton.classList.remove('is-hiden');
+        nextButton.removeAttribute('disabled');
+        // prewButton.removeAttribute('disabled');
+    }
     element(totalPages, page);
 }
 
 formImages.addEventListener('submit', addImages);
-
-const ulTag = document.querySelector('.pagination-list');
-
-function element(totalPages, page) {
-    console.log('listtop', page);
-    console.log('total', totalPages);
-    let liTag = '';
-    let thirdPagesAnd = totalPages - 2;
-    let thirdPages = page - 2;
-    let curentPage = page;
-
-    if (totalPages > 6) {
-        if (curentPage >= 1) {
-            if (curentPage === 1) {
-                liTag += `<li class="pagination-item"><button disabled="true" class="pagination-arrow prew-button" type="button">prew</button></li>`;
-            } else {
-                liTag += `<li class="pagination-item"><button class="pagination-arrow prew-button" type="button">prew</button></li>`;
-            }
-        }
-        if (page < 3) {
-            thirdPages = 1;
-            page = 3;
-        }
-        if (page > totalPages - 3) {
-            page = totalPages - 3;
-            thirdPages = page - 2;
-        }
-        for (let i = thirdPages; i <= page; i++) {
-            if (i === curentPage) {
-                liTag += `<li class="pagination-item"><button class="pagination-number active" type="button">${i}</button></li>`;
-            } else {
-                liTag += `<li class="pagination-item"><button class="pagination-number" type="button">${i}</button></li>`;
-            }
-        }
-        liTag += `<li class="pagination-item dot-item"><span>...</span></li>`;
-        for (let i = thirdPagesAnd; i <= totalPages; i++) {
-            if (i === curentPage) {
-                liTag += `<li class="pagination-item"><button class="pagination-number active" type="button">${i}</button></li>`;
-            } else {
-                liTag += `<li class="pagination-item"><button class="pagination-number" type="button">${i}</button></li>`;
-            }
-        }
-        if (curentPage <= totalPages) {
-            if (curentPage === totalPages) {
-                liTag += `<li class="pagination-item"><button disabled="true" class="pagination-arrow next-button" type="button">next</button></li>`;
-            } else {
-                liTag += `<li class="pagination-item"><button class="pagination-arrow next-button" type="button">next</button></li>`;
-            }
-        }
-    } else {
-        for (let i = page; i <= totalPages; i++) {
-            if (i = page) {
-                liTag += `<li class="pagination-item"><button class="pagination-number active" type="button">${i}</button></li>`;
-            } else {
-                liTag += `<li class="pagination-item"><button class="pagination-number" type="button">${i}</button></li>`;
-            }
-        }
-    }
-    ulTag.innerHTML = liTag;
-    
-}
 
 async function loadMor(event) {
     if (event.target.classList.contains('pagination-arrow') || event.target.classList.contains('pagination-number')) {
@@ -129,16 +75,8 @@ async function loadMor(event) {
         if (page > totalPages) {
             page = totalPages;
         }
-        if (event.target.classList.contains('next-button')) {
-            page += 1;
-            getImageFromServer.page = page;
-        } else if (event.target.classList.contains('prew-button')) {
-            page -= 1;
-            getImageFromServer.page = page;
-        } else {
-            getImageFromServer.page = Number(event.target.textContent);
-            page = getImageFromServer.page;
-        }
+        getImageFromServer.page = Number(event.target.textContent);
+        page = getImageFromServer.page;
 
         try {
             console.log("getpage",getImageFromServer.page);
@@ -155,7 +93,19 @@ async function loadMor(event) {
         }
         lightbox.refresh();
         console.log(event.target.classList.contains('next-button'));
-        console.log('page',page);
+        console.log('page', page);
+        
+        if (page === 1) {
+            prewButton.setAttribute('disabled', 'true');
+        } else {
+            prewButton.removeAttribute('disabled');
+        }
+        if (page === totalPages) {
+            nextButton.setAttribute('disabled', 'true');
+        } else {
+            nextButton.removeAttribute('disabled');
+        }
+
         element(totalPages, page);
     } else {
         return;
@@ -163,3 +113,74 @@ async function loadMor(event) {
 }
 
 ulTag.addEventListener('click', loadMor);
+
+const prewButton = document.querySelector('.prew-button');
+const nextButton = document.querySelector('.next-button');
+
+async function prewList(event) {
+    page -= 1;
+    getImageFromServer.page = page;
+    listImage.innerHTML = '';
+    try {
+        console.log("getpage",getImageFromServer.page);
+        const getImg = await getImageFromServer.getImages(nameImage);
+        totalNumberImage += getImg.hits.length;
+        if (totalNumberImage >= getImg.totalHits) {
+            buttonLoadMor.classList.add('is-hiden');
+            Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.");
+            return;
+        }
+        createListItem(getImg.hits);
+    } catch (error) {
+        console.log(error.message);
+    }
+
+    if (page === 1) {
+        prewButton.setAttribute('disabled', 'true');
+    } else {
+        prewButton.removeAttribute('disabled');
+    }
+    if (page === totalPages) {
+        nextButton.setAttribute('disabled', 'true');
+    } else {
+        nextButton.removeAttribute('disabled');
+    }
+
+    element(totalPages, page);
+}
+
+prewButton.addEventListener('click', prewList);
+
+async function nextList(event) {
+    page += 1;
+    getImageFromServer.page = page;
+    listImage.innerHTML = '';
+    try {
+        console.log("getpage",getImageFromServer.page);
+        const getImg = await getImageFromServer.getImages(nameImage);
+        totalNumberImage += getImg.hits.length;
+        if (totalNumberImage >= getImg.totalHits) {
+            buttonLoadMor.classList.add('is-hiden');
+            Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.");
+            return;
+        }
+        createListItem(getImg.hits);
+    } catch (error) {
+        console.log(error.message);
+    }
+
+    if (page === 1) {
+        prewButton.setAttribute('disabled', 'true');
+    } else {
+        prewButton.removeAttribute('disabled');
+    }
+    if (page === totalPages) {
+        nextButton.setAttribute('disabled', 'true');
+    } else {
+        nextButton.removeAttribute('disabled');
+    }
+
+    element(totalPages, page);
+}
+
+nextButton.addEventListener('click', nextList);
