@@ -27,6 +27,6 @@ export function createListItem(images) {
         `;
     })
         .join('');
-    listImage.insertAdjacentHTML("beforeend", nameImg);;
+    listImage.innerHTML = nameImg;
 }
 
