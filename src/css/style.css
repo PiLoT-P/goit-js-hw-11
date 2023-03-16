@@ -141,7 +141,7 @@ button[type="submit"] {
 .pagination-item:last-child{
     margin-left: 198px;
 } */
-.pagination-item:nth-child(n+2){
+.pagination-item:nth-last-child(n + 2){
     margin-right: 15px;
 }
 
